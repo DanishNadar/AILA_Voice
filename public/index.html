@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AILA Leadership Studio</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="background-glow"></div>
+
+  <div class="app-shell">
+    <div class="layout-grid">
+      <section class="panel hero-panel hero-span">
+        <div class="eyebrow">AILA</div>
+        <h1>AILA Leadership Studio</h1>
+        <p class="hero-copy">
+          Practice difficult conversations, reflect on your choices, and coach yourself toward stronger leadership habits.
+        </p>
+      </section>
+
+      <aside class="status-column">
+        <section class="panel status-panel">
+          <div class="status-label">Provider</div>
+          <div class="status-value">Groq</div>
+        </section>
+        <section class="panel status-panel">
+          <div class="status-label">Chat model</div>
+          <div class="status-value" id="chatModelLabel">llama-3.1-8b-instant - live</div>
+        </section>
+      </aside>
+
+      <section class="panel setup-panel">
+        <h2>Practice setup</h2>
+        <p class="section-copy">Pick a preset or import more scenarios for this session.</p>
+
+        <label class="field-label" for="scenarioSelect">Preset scenario</label>
+        <select id="scenarioSelect" class="select-field">
+          <option value="repairing-exclusion">Repairing exclusion after a team meeting A teammate felt dismissed in a meeting and is unsure whether you really value their perspective.</option>
+        </select>
+
+        <p class="scenario-summary" id="scenarioSummary">
+          A teammate felt dismissed in a meeting and is unsure whether you really value their perspective.
+        </p>
+
+        <div class="meta-grid">
+          <div class="meta-card">
+            <div class="meta-label">Your role</div>
+            <div class="meta-value">the team lead</div>
+          </div>
+          <div class="meta-card">
+            <div class="meta-label">Counterpart</div>
+            <div class="meta-value">Jamie - a capable teammate who felt sidelined</div>
+          </div>
+          <div class="meta-card wide-card">
+            <div class="meta-label">Leadership focus</div>
+            <div class="meta-value">active listening, inclusion, accountability</div>
+          </div>
+        </div>
+
+        <div class="button-stack">
+          <button id="restartScenarioBtn" class="btn btn-primary" type="button">Restart scenario</button>
+          <button id="importScenariosBtn" class="btn btn-secondary" type="button">Import scenarios</button>
+          <button id="downloadTemplateBtn" class="btn btn-secondary" type="button">Download template</button>
+          <input id="scenarioFileInput" type="file" accept="application/json" hidden />
+        </div>
+
+        <div class="response-section">
+          <div class="response-title">Your response</div>
+          <textarea id="messageInput" placeholder="Type what you would say as the leader."></textarea>
+          <div class="help-text">Press Enter to send. Use Shift + Enter for a new line.</div>
+
+          <div class="action-row">
+            <button id="sendBtn" class="btn btn-gold" type="button">Send</button>
+            <button id="recordBtn" class="btn btn-primary" type="button">Record with mic</button>
+          </div>
+
+          <div class="action-row secondary-actions">
+            <button id="uploadAudioBtn" class="btn btn-secondary" type="button">Upload audio</button>
+            <input id="audioFileInput" type="file" accept="audio/*" hidden />
+          </div>
+
+          <div class="status-mini-grid status-mini-grid-three">
+            <div class="mini-card">
+              <div class="mini-label">Status</div>
+              <div class="mini-value" id="statusText">Ready</div>
+            </div>
+            <div class="mini-card">
+              <div class="mini-label">Microphone</div>
+              <div class="mini-value" id="micStatus">Ready</div>
+            </div>
+            <div class="mini-card">
+              <div class="mini-label">Voice</div>
+              <div class="mini-value" id="voiceStatus">Ready</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel conversation-panel">
+        <h2>Conversation</h2>
+
+        <div class="avatar-stage" aria-label="AILA voice avatar">
+          <div class="avatar-ring ring-one"></div>
+          <div class="avatar-ring ring-two"></div>
+          <div class="avatar-ring ring-three"></div>
+
+          <div class="audio-bars" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+
+          <div class="avatar-core" id="ailaAvatar" data-speaking="false">
+            <div class="avatar-face">
+              <div class="avatar-eyes"><span></span><span></span></div>
+              <div class="avatar-mouth" id="avatarMouth"></div>
+            </div>
+          </div>
+        </div>
+
+        <p class="section-copy" id="conversationContext">
+          In the last meeting, Jamie raised a concern about workload distribution and the conversation moved on without real discussion.
+        </p>
+
+        <div id="conversationThread" class="conversation-thread"></div>
+      </section>
+
+      <aside class="panel coaching-panel">
+        <h2>Coaching view</h2>
+        <p class="section-copy">After each turn, AILA gives you a brief reflection to sharpen your next move.</p>
+
+        <div class="coaching-card" id="coachFeedback">Send a message to get coaching feedback.</div>
+
+        <h3>Scenario reflection prompts</h3>
+        <ul class="prompt-list">
+          <li>When did you show genuine curiosity?</li>
+          <li>Did you move to solutions too early?</li>
+        </ul>
+      </aside>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="termsModal">
+    <div class="modal-card">
+      <div class="eyebrow">Before you begin</div>
+      <h2>AILA Terms of Use and Privacy Notice</h2>
+      <p class="modal-intro">
+        You must review and accept these terms before using AILA. AILA is a leadership practice tool for educational and professional development use. Effective date: 2026-03-20.
+      </p>
+
+      <div class="terms-scroll">
+        <section class="term-block">
+          <h3>Purpose of the app</h3>
+          <p>AILA is designed to help users practice leadership conversations, reflect on communication choices, and learn better leadership strategies. It is not a substitute for legal advice, HR advice, mental health care, or emergency support.</p>
+        </section>
+
+        <section class="term-block">
+          <h3>What the app sends and does not store</h3>
+          <p>The app itself is designed not to store conversation transcripts in a database. During a session, messages are kept in browser memory so the conversation can continue. Imported scenarios can be stored locally in the browser for convenience, but acceptance of these terms is not remembered between app loads in this build.</p>
+        </section>
+
+        <section class="term-block">
+          <h3>How AI processing works</h3>
+          <p>When you send a message or audio clip, AILA sends that request through its serverless API to an external inference provider so the app can generate a response or transcribe speech. In the default production setup for this project, that provider is Groq.</p>
+        </section>
+
+        <section class="term-block">
+          <h3>Privacy and provider handling</h3>
+          <p>Groq states that customer data is not retained by default for inference requests, except in limited circumstances such as reliability troubleshooting or abuse investigation. Groq also offers a Zero Data Retention setting that an organization administrator can enable. Your deployment team is responsible for configuring provider settings appropriately.</p>
+        </section>
+
+        <section class="term-block">
+          <h3>No training promise from the app</h3>
+          <p>This application does not store your responses to build its own training set. Provider-side handling is governed by the provider's platform settings and policies.</p>
+        </section>
+
+        <section class="term-block">
+          <h3>Appropriate use</h3>
+          <p>Do not submit sensitive personal data, regulated health information, payment card information, or confidential information unless your organization has approved that use and configured the provider accordingly.</p>
+        </section>
+
+        <section class="term-block">
+          <h3>User responsibility</h3>
+          <p>You are responsible for how you use the app and for reviewing AI-generated content critically. Practice conversations may be helpful, but they can still be incomplete, mistaken, or contextually imperfect.</p>
+        </section>
+      </div>
+
+      <label class="checkbox-row">
+        <input type="checkbox" id="termsCheckbox" />
+        <span>I have reviewed the Terms of Use and Privacy Notice and I agree to continue.</span>
+      </label>
+
+      <p class="modal-footnote">
+        By continuing, you acknowledge that AILA is a practice and reflection tool and that your organization controls its deployment configuration.
+      </p>
+
+      <div class="modal-actions">
+        <button class="btn btn-gold" id="agreeBtn" type="button" disabled>Agree and continue</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
